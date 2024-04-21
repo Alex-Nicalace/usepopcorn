@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Rating from './Rating';
-import useData from './hooks/useData';
+import useData from '../hooks/useData';
 import { Loader } from './Loader';
 import { LoadingError } from './LoadingError';
 import { WatchedData, KEY } from './App';
+import { useKey } from '../hooks/useKey';
 
 type MovieDetailsData = {
   Title: string;
@@ -29,7 +30,6 @@ export function MovieDetails({
   onAddWatchedMovies: (movie: WatchedData) => void;
   havingRating: number | undefined;
 }) {
-  // const [movie, setMovie] = useState<MovieDetailsData>({} as MovieDetailsData);
   const {
     data: movie,
     error,
@@ -40,8 +40,8 @@ export function MovieDetails({
     200
   );
   const [userRating, setUserRating] = useState(0);
+  const countRef = useRef(0);
 
-  // console.log(movie);
   const {
     Title: title,
     Year: year,
@@ -59,7 +59,7 @@ export function MovieDetails({
   useEffect(
     function () {
       const prevTitle = document.title;
-      document.title = `Movie - ${title}`;
+      document.title = `Фильм - ${title}`;
 
       return function () {
         document.title = prevTitle;
@@ -68,20 +68,7 @@ export function MovieDetails({
     [title]
   );
 
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.code === 'Escape') {
-        onCloseMovie();
-      }
-      console.log('CLOSE Movie Details');
-    }
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return function () {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [onCloseMovie]);
+  useKey('Escape', onCloseMovie);
 
   function handleAddMovies() {
     if (!userRating) return;
@@ -93,46 +80,16 @@ export function MovieDetails({
       runtime: parseInt(runtime),
       imdbRating: +imdbRating,
       userRating,
+      countRatingDecisions: countRef.current,
     });
     onCloseMovie();
   }
 
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState('');
-  /*   useEffect(
-    function () {
-      let isIgnore = false;
-      (async function () {
-        setIsLoading(true);
-        setError('');
-        try {
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
-          );
-          if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-          const data = await res.json();
-          if (!isIgnore) {
-            setMovie(data);
-          }
-          console.log(data);
-        } catch (error) {
-          if (error instanceof Error) {
-            console.error(error.message);
-            setError(error.message);
-          } else {
-            throw error;
-          }
-        } finally {
-          setIsLoading(false);
-        }
-      })();
- 
-      return () => {
-        isIgnore = true;
-      };
-    },
-    [selectedId]
-  ); */
+  function handleSetRating(rating: number) {
+    setUserRating(rating);
+    countRef.current += 1;
+  }
+
   return (
     <div className="details">
       {isLoading && <Loader />}
@@ -151,7 +108,7 @@ export function MovieDetails({
               <p>{genre}</p>
               <p>
                 <span>⭐️</span>
-                {imdbRating} IMDb rating
+                {imdbRating} IMDb рейтинг
               </p>
             </div>
           </header>
@@ -166,23 +123,23 @@ export function MovieDetails({
                     size="24px"
                     color="yellow"
                     defaultRating={imdbRating}
-                    onSetRating={setUserRating}
+                    onSetRating={handleSetRating}
                   />
                   {userRating > 0 && (
                     <button onClick={handleAddMovies} className="btn-add">
-                      + Add to list
+                      + В избранное
                     </button>
                   )}
                 </>
               ) : (
-                <p>You have rated this movie {havingRating} ⭐</p>
+                <p>Вы оценили этот фильм {havingRating} ⭐</p>
               )}
             </div>
             <p>
               <em>{plot}</em>
             </p>
-            <p>Starring {actors}</p>
-            <p>Directed by {director}</p>
+            <p>В главных ролях: {actors}</p>
+            <p>Режиссер: {director}</p>
           </section>
         </>
       )}
