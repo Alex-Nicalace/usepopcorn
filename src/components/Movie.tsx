@@ -10,7 +10,7 @@ export function Movie({
 }): JSX.Element {
   return (
     <li onClick={() => onSelectMovie(imdbID)} key={imdbID}>
-      <img src={Poster} alt={`${Title} poster`} />
+      <img src={Poster} alt={`${Title} постер`} />
       <h3>{Title}</h3>
       <div>
         <p>

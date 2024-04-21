@@ -23,7 +23,7 @@ export function WatchedMovie({
         </p>
         <p>
           <span>⏳</span>
-          <span>{movie.runtime} min</span>
+          <span>{movie.runtime} мин</span>
         </p>
       </div>
       <button onClick={() => onRemove(movie.imdbID)} className="btn-delete">

@@ -1,4 +1,3 @@
-import React from 'react';
 import { WatchedData } from './App';
 import { WatchedMovie } from './WatchedMovie';
 

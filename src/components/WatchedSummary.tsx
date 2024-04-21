@@ -7,11 +7,11 @@ export function WatchedSummary({ watched }: { watched: WatchedData[] }) {
   const avgRuntime = average(watched.map((movie) => movie.runtime));
   return (
     <div className="summary">
-      <h2>Movies you watched</h2>
+      <h2>Фильмы, которые вы смотрели</h2>
       <div>
         <p>
           <span>#️⃣</span>
-          <span>{watched.length} movies</span>
+          <span>{watched.length} фильма</span>
         </p>
         <p>
           <span>⭐️</span>
@@ -23,7 +23,7 @@ export function WatchedSummary({ watched }: { watched: WatchedData[] }) {
         </p>
         <p>
           <span>⏳</span>
-          <span>{avgRuntime} min</span>
+          <span>{avgRuntime} мин</span>
         </p>
       </div>
     </div>
