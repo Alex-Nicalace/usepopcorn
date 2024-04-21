@@ -45,7 +45,7 @@ export default function App() {
     error,
     isLoading,
   } = useData<MovieData[]>(
-    `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+    `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
     [],
     500,
     'Search',
