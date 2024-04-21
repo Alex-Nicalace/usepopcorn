@@ -35,7 +35,7 @@ export function MovieDetails({
     error,
     isLoading,
   } = useData(
-    `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
+    `https://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
     {} as MovieDetailsData,
     200
   );
